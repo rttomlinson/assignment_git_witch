@@ -1,19 +1,19 @@
-function GitWitch({
-    parser,
-    runner,
-    formatter
-}) {
-    this.process = function(input) {
-        return new Promise((resolve, reject) => {
-            let command = parser.parse(input);
-            let proResponse = runner.run(command);
-            proResponse.then((response) => {
-                return formatter.format(response);
-            }).then((output) => {
-                resolve(output);
-            });
-        });
-    };
+class GitWitch {
+    constructor({
+        parser,
+        runner,
+        formatter
+    }) {
+        this.parser = parser;
+        this.runner = runner;
+        this.formatter = formatter;
+    }
+    async process(input) {
+        let command = this.parser.parse(input);
+        let response = await this.runner.run(command);
+        let output = this.formatter.format(response);
+        return output;
+    }
 }
 
 
