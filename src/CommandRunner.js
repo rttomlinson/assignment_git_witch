@@ -1,14 +1,13 @@
+const GithubWrapper = require("./GithubWrapper");
+
 function CommandRunner({
     github
 }) {
-    this.github = github;
+    this.github = github || new GithubWrapper({});
 
     this.run = async function(command) {
         let gitData = await this.github.getRepos(command);
-        gitData = this.scrubData(gitData);
-        if (command.query === 'count') {
-            gitData = gitData.length;
-        }
+        gitData = this.scrubData(gitData.data);
         command.results = gitData;
         return command;
     };

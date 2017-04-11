@@ -1,21 +1,21 @@
 const {
-  getUser,
-  getSubject,
-  getQuery
+    getUser,
+    getSubject,
+    getQuery
 } = require("./services/question_parser/regex.js");
 
 function QuestionParser() {
-  this.parse = function(question) {
-    let username = getUser(question);
-    let subject = getSubject(question);
-    let query = getQuery(question);
-    return {
-      username: username,
-      subject: subject,
-      query: query
+    this.parse = function(question) {
+        let username = getUser(question);
+        let subject = getSubject(question);
+        let query = getQuery(question);
+        return {
+            username: username,
+            subject: subject,
+            query: query
+        };
     };
-  };
-  return this;
+    return this;
 }
 
 module.exports = QuestionParser;
