@@ -1,19 +1,26 @@
-const filterResponseObject = require("./services/command_runner/responseHandler");
-
-function CommandRunner(
-  {
+function CommandRunner({
     github
-  }
-) {
-  this.github = github;
+}) {
+    this.github = github;
 
-  this.run = function(command) {
-    return new Promise(resolve => {
-      let responseObject = this.github.getRepos(command);
-      command.results = filterResponseObject(command, responseObject);
-      resolve(command);
-    });
-  };
+    this.run = async function(command) {
+        let gitData = await this.github.getRepos(command);
+        gitData = this.scrubData(gitData);
+        if (command.query === 'count') {
+            gitData = gitData.length;
+        }
+        command.results = gitData;
+        return command;
+    };
+
+    this.scrubData = function(data) {
+        return data.map((repo) => {
+            let newObj = {};
+            newObj.name = repo.name;
+            newObj.description = repo.description;
+            return newObj;
+        });
+    }
 }
 
 module.exports = CommandRunner;

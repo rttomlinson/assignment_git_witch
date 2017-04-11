@@ -3,28 +3,56 @@ const CommandRunner = require("../src/CommandRunner");
 describe("CommandRunner", function() {
     beforeEach(() => {
         this.github = {
-            getRepos() {
-                let results = {
-                    username: "bobby",
-                    repos: [{
-                        name: "proj1",
-                        stars: 0
-                    }, {
-                        name: "proj2",
-                        stars: 0
-                    }],
-                    starredRepos: [{
-                        name: "projstar1",
-                        stars: 5
-                    }, {
-                        name: "projstar2",
-                        stars: 5
-                    }, {
-                        name: "projstar3",
-                        stars: 5
-                    }]
-                };
-                return results;
+            getRepos(command) {
+                return new Promise(function(resolve, reject) {
+                    let results;
+                    if (command.subject === 'starred repos') {
+                        results = [{
+                            name: "projstar1",
+                            stars: 5,
+                            description: "hjkshdjkfhajd"
+                        }, {
+                            name: "projstar2",
+                            stars: 5,
+                            description: "hjkshdjkfhajd"
+
+                        }, {
+                            name: "projstar3",
+                            stars: 5,
+                            description: "hjkshdjkfhajd"
+
+                        }];
+                    }
+                    else {
+                        results = [{
+                            name: "projstar1",
+                            stars: 5,
+                            description: "hjkshdjkfhajd"
+
+                        }, {
+                            name: "projstar2",
+                            stars: 5,
+                            description: "hjkshdjkfhajd"
+
+                        }, {
+                            name: "projstar3",
+                            stars: 5,
+                            description: "hjkshdjkfhajd"
+
+                        }, {
+                            name: "proj1",
+                            stars: 0,
+                            description: "hjkshdjkfhajd"
+
+                        }, {
+                            name: "proj2",
+                            stars: 0,
+                            description: "hjkshdjkfhajd"
+
+                        }]
+                    }
+                    resolve(results);
+                });
             }
         };
         this.runner = new CommandRunner({
@@ -42,11 +70,25 @@ describe("CommandRunner", function() {
             subject: "repos",
             query: "details",
             results: [{
+                name: "projstar1",
+                description: "hjkshdjkfhajd"
+
+            }, {
+                name: "projstar2",
+                description: "hjkshdjkfhajd"
+
+            }, {
+                name: "projstar3",
+                description: "hjkshdjkfhajd"
+
+            }, {
                 name: "proj1",
-                stars: 0
+                description: "hjkshdjkfhajd"
+
             }, {
                 name: "proj2",
-                stars: 0
+                description: "hjkshdjkfhajd"
+
             }]
         };
         this.runner.run(command).then(result => {
@@ -60,9 +102,8 @@ describe("CommandRunner", function() {
             subject: "repos",
             query: "count"
         };
-        let response = 2;
         this.runner.run(command).then(result => {
-            expect(result.results).toEqual(2);
+            expect(result.results).toEqual(5);
             done();
         });
     });
@@ -72,7 +113,6 @@ describe("CommandRunner", function() {
             subject: "starred repos",
             query: "count"
         };
-        let response = 3;
         this.runner.run(command).then(result => {
             expect(result.results).toEqual(3);
             done();
@@ -90,13 +130,15 @@ describe("CommandRunner", function() {
             query: "details",
             results: [{
                 name: "projstar1",
-                stars: 5
+                description: "hjkshdjkfhajd"
             }, {
                 name: "projstar2",
-                stars: 5
+                description: "hjkshdjkfhajd"
+
             }, {
                 name: "projstar3",
-                stars: 5
+                description: "hjkshdjkfhajd"
+
             }]
         };
         this.runner.run(command).then(result => {
